@@ -1,0 +1,19 @@
+{
+  "builds": [
+    {
+      "src": "blitzyxsc_api/main.py",
+      "use": "@vercel/python",
+      "config": {
+        "includeFiles": ["**/*.py", "playground.html", "requirements.txt"],
+        "runtime": "python3.12"
+      }
+    }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "blitzyxsc_api/main.py" }
+  ],
+  "env": {
+    "BLITZYXSC_CORS_ORIGINS": "[\"*\"]",
+    "BLITZYXSC_DEFAULT_PAGE_SIZE": "20"
+  }
+}

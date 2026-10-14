@@ -1,0 +1,6321 @@
+{
+  "info": {
+    "name": "blitzyxsc \u2014 X/Twitter Free API",
+    "_postman_id": "blitzyxsc-1-0-0",
+    "description": "blitzyxsc \u2014 Auth-free X/Twitter scraping API by Blitz (blitzlabx).\n\nMulti-provider router: composable \u2192 syndication \u2192 nitter \u2192 twscrape \u2192 snscrape \u2192 rss.\nNo auth, no rate limits, no account ban risk.\n\nSet the `base_url` variable to your blitzyxsc deployment URL.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string",
+      "description": "Base URL of your blitzyxsc deployment."
+    }
+  ],
+  "item": [
+    {
+      "name": "Meta",
+      "item": [
+        {
+          "name": "Health check + provider status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ],
+              "query": []
+            },
+            "description": "Health check + provider status"
+          },
+          "response": []
+        },
+        {
+          "name": "List configured providers and their priority order",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/providers",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "providers"
+              ],
+              "query": []
+            },
+            "description": "List configured providers and their priority order"
+          },
+          "response": []
+        },
+        {
+          "name": "Check health of each provider (live probe)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/providers/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "providers",
+                "health"
+              ],
+              "query": []
+            },
+            "description": "Check health of each provider (live probe)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Posts & Timeline",
+      "item": [
+        {
+          "name": "Get a single tweet by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/:tweet_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                ":tweet_id"
+              ],
+              "query": []
+            },
+            "description": "Returns a single tweet with full metadata: text, author, media, engagement counts, hashtags, mentions, URLs, quoted/retweeted tweet. Tries providers in priority order (syndication \u2192 composable \u2192 nitter)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets from a user's timeline",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/user/:username",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "user",
+                ":username"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Returns the most recent tweets posted by a user. Paginated with cursor. Default page size 20, max 100."
+          },
+          "response": []
+        },
+        {
+          "name": "Get latest tweets from a user (alias of /user)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/user/:username/latest",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "user",
+                ":username",
+                "latest"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Get latest tweets from a user (alias of /user)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets containing media (photos/videos) from a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/user/:username/media",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "user",
+                ":username",
+                "media"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Get tweets containing media (photos/videos) from a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets containing photos from a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/user/:username/photos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "user",
+                ":username",
+                "photos"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Get tweets containing photos from a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets containing videos from a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/user/:username/videos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "user",
+                ":username",
+                "videos"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Get tweets containing videos from a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets containing animated GIFs from a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/user/:username/gifs",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "user",
+                ":username",
+                "gifs"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Get tweets containing animated GIFs from a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get replies posted by a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/user/:username/replies",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "user",
+                ":username",
+                "replies"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Get replies posted by a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get original tweets (no replies, no retweets) from a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/user/:username/original",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "user",
+                ":username",
+                "original"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Get original tweets (no replies, no retweets) from a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get retweets posted by a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/user/:username/retweets",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "user",
+                ":username",
+                "retweets"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Get retweets posted by a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get quote-tweets posted by a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/user/:username/quotes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "user",
+                ":username",
+                "quotes"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Get quote-tweets posted by a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get text-only tweets (no media) from a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/user/:username/text-only",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "user",
+                ":username",
+                "text-only"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Get text-only tweets (no media) from a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets from verified users only (filter applied to timeline)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/user/:username/verified",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "user",
+                ":username",
+                "verified"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Get tweets from verified users only (filter applied to timeline)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get a user's pinned tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/user/:username/pinned",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "user",
+                ":username",
+                "pinned"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Get a user's pinned tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get raw tweet data (no normalization)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/id/:tweet_id/raw",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "id",
+                ":tweet_id",
+                "raw"
+              ],
+              "query": []
+            },
+            "description": "Get raw tweet data (no normalization)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get only the text content of a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/id/:tweet_id/text",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "id",
+                ":tweet_id",
+                "text"
+              ],
+              "query": []
+            },
+            "description": "Get only the text content of a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the author of a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/id/:tweet_id/author",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "id",
+                ":tweet_id",
+                "author"
+              ],
+              "query": []
+            },
+            "description": "Get the author of a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get engagement stats (replies, retweets, likes, quotes, views)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/id/:tweet_id/stats",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "id",
+                ":tweet_id",
+                "stats"
+              ],
+              "query": []
+            },
+            "description": "Get engagement stats (replies, retweets, likes, quotes, views)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get hashtags used in a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/id/:tweet_id/hashtags",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "id",
+                ":tweet_id",
+                "hashtags"
+              ],
+              "query": []
+            },
+            "description": "Get hashtags used in a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get users mentioned in a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/id/:tweet_id/mentions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "id",
+                ":tweet_id",
+                "mentions"
+              ],
+              "query": []
+            },
+            "description": "Get users mentioned in a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get URLs contained in a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/id/:tweet_id/urls",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "id",
+                ":tweet_id",
+                "urls"
+              ],
+              "query": []
+            },
+            "description": "Get URLs contained in a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the conversation thread containing a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/id/:tweet_id/conversation",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "id",
+                ":tweet_id",
+                "conversation"
+              ],
+              "query": []
+            },
+            "description": "Get the conversation thread containing a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the tweet quoted by this tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/id/:tweet_id/quoted",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "id",
+                ":tweet_id",
+                "quoted"
+              ],
+              "query": []
+            },
+            "description": "Get the tweet quoted by this tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the tweet retweeted by this tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/id/:tweet_id/retweeted",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "id",
+                ":tweet_id",
+                "retweeted"
+              ],
+              "query": []
+            },
+            "description": "Get the tweet retweeted by this tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Fetch multiple tweets by IDs (comma-separated)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/ids",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "ids"
+              ],
+              "query": []
+            },
+            "description": "Fetch multiple tweets by IDs (comma-separated)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets from a user within a date range (filter applied)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/by-date",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "by-date"
+              ],
+              "query": []
+            },
+            "description": "Get tweets from a user within a date range (filter applied)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets from a user filtered by language code",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/by-language",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "by-language"
+              ],
+              "query": []
+            },
+            "description": "Get tweets from a user filtered by language code"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets from a user containing a specific hashtag",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/by-hashtag",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "by-hashtag"
+              ],
+              "query": []
+            },
+            "description": "Get tweets from a user containing a specific hashtag"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets from a user mentioning a specific user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/by-mention",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "by-mention"
+              ],
+              "query": []
+            },
+            "description": "Get tweets from a user mentioning a specific user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets from a user with at least N likes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/by-min-likes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "by-min-likes"
+              ],
+              "query": []
+            },
+            "description": "Get tweets from a user with at least N likes"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets from a user with at least N retweets",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/by-min-retweets",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "by-min-retweets"
+              ],
+              "query": []
+            },
+            "description": "Get tweets from a user with at least N retweets"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets from a user with at least N views",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/by-min-views",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "by-min-views"
+              ],
+              "query": []
+            },
+            "description": "Get tweets from a user with at least N views"
+          },
+          "response": []
+        },
+        {
+          "name": "Get most popular tweets from a user (sorted by likes)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/popular/:username",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "popular",
+                ":username"
+              ],
+              "query": []
+            },
+            "description": "Get most popular tweets from a user (sorted by likes)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets from a user posted via a specific source app",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/by-source",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "by-source"
+              ],
+              "query": []
+            },
+            "description": "Get tweets from a user posted via a specific source app"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets flagged as sensitive from a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/sensitive/:username",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "sensitive",
+                ":username"
+              ],
+              "query": []
+            },
+            "description": "Get tweets flagged as sensitive from a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets from a user excluding sensitive content",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/posts/clean/:username",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "clean",
+                ":username"
+              ],
+              "query": []
+            },
+            "description": "Get tweets from a user excluding sensitive content"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Search",
+      "item": [
+        {
+          "name": "Search tweets by keyword",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                },
+                {
+                  "key": "q",
+                  "value": "openai",
+                  "description": "Search query"
+                }
+              ]
+            },
+            "description": "Standard keyword search. Use Twitter advanced query syntax: from:user, to:user, since:YYYY-MM-DD, until:YYYY-MM-DD, #hashtag, @user, min_faves:N, min_retweets:N, lang:en, geocode:lat,long,radius, filter:images, filter:videos, filter:news, -filter:retweets, -filter:replies, etc."
+          },
+          "response": []
+        },
+        {
+          "name": "Search latest tweets",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/latest",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "latest"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search latest tweets"
+          },
+          "response": []
+        },
+        {
+          "name": "Search top tweets (most popular)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/top",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "top"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search top tweets (most popular)"
+          },
+          "response": []
+        },
+        {
+          "name": "Advanced search with structured filters",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/advanced",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "advanced"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Advanced search with structured filters"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets mentioning people",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/people",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "people"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets mentioning people"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets containing photos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/photos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "photos"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets containing photos"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets containing videos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/videos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "videos"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets containing videos"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets containing news links",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/news",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "news"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets containing news links"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets containing GIFs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/gifs",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "gifs"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets containing GIFs"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets containing URLs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/links",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "links"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets containing URLs"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets that are questions (?)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/questions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "questions"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets that are questions (?)"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets with positive sentiment :)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/positive",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "positive"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets with positive sentiment :)"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets with negative sentiment :(",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/negative",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "negative"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets with negative sentiment :("
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets containing a hashtag",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/hashtag/:hashtag",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "hashtag",
+                ":hashtag"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets containing a hashtag"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets containing a cashtag ($STOCK)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/cashtag/:cashtag",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "cashtag",
+                ":cashtag"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets containing a cashtag ($STOCK)"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets mentioning a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/mention/:username",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "mention",
+                ":username"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets mentioning a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets from a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/from/:username",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "from",
+                ":username"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets from a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets directed to a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/to/:username",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "to",
+                ":username"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets directed to a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets since a date",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/since/:date",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "since",
+                ":date"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets since a date"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets until a date",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/until/:date",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "until",
+                ":date"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets until a date"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets in a specific language",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/lang/:lang",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "lang",
+                ":lang"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets in a specific language"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets near a geocode",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/geocode/:geocode",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "geocode",
+                ":geocode"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets near a geocode"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets near a place name",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/near/:place",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "near",
+                ":place"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets near a place name"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets with at least N likes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/min-faves/:min_faves",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "min-faves",
+                ":min_faves"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets with at least N likes"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets with at least N retweets",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/min-retweets/:min_retweets",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "min-retweets",
+                ":min_retweets"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets with at least N retweets"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets with at least N replies",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/min-replies/:min_replies",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "min-replies",
+                ":min_replies"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets with at least N replies"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets from verified accounts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/verified",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "verified"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets from verified accounts"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets excluding retweets",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/no-retweets",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "no-retweets"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets excluding retweets"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets excluding replies",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/no-replies",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "no-replies"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets excluding replies"
+          },
+          "response": []
+        },
+        {
+          "name": "Search tweets excluding sensitive content",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/safe",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "safe"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search tweets excluding sensitive content"
+          },
+          "response": []
+        },
+        {
+          "name": "Search only original tweets (no replies, no retweets)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search/original",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "original"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Search only original tweets (no replies, no retweets)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Profile",
+      "item": [
+        {
+          "name": "Get a user's profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username"
+              ],
+              "query": []
+            },
+            "description": "Returns the user's profile: bio, avatar, banner, follower/following counts, verified status, protected status, website, location, join date, etc."
+          },
+          "response": []
+        },
+        {
+          "name": "Get only the bio of a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/bio",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "bio"
+              ],
+              "query": []
+            },
+            "description": "Get only the bio of a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get only the avatar URL of a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/avatar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "avatar"
+              ],
+              "query": []
+            },
+            "description": "Get only the avatar URL of a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get only the banner URL of a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/banner",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "banner"
+              ],
+              "query": []
+            },
+            "description": "Get only the banner URL of a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get only the display name of a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/display-name",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "display-name"
+              ],
+              "query": []
+            },
+            "description": "Get only the display name of a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get only the location of a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/location",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "location"
+              ],
+              "query": []
+            },
+            "description": "Get only the location of a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get only the website of a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/website",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "website"
+              ],
+              "query": []
+            },
+            "description": "Get only the website of a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get only the stats (followers, following, tweets, likes) of a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/stats",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "stats"
+              ],
+              "query": []
+            },
+            "description": "Get only the stats (followers, following, tweets, likes) of a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get follower count of a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/followers",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "followers"
+              ],
+              "query": []
+            },
+            "description": "Get follower count of a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get following count of a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/following",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "following"
+              ],
+              "query": []
+            },
+            "description": "Get following count of a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweet count of a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/tweets-count",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "tweets-count"
+              ],
+              "query": []
+            },
+            "description": "Get tweet count of a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get like count of a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/likes-count",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "likes-count"
+              ],
+              "query": []
+            },
+            "description": "Get like count of a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get listed count of a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/listed-count",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "listed-count"
+              ],
+              "query": []
+            },
+            "description": "Get listed count of a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Check if a user is verified",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/verified",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "verified"
+              ],
+              "query": []
+            },
+            "description": "Check if a user is verified"
+          },
+          "response": []
+        },
+        {
+          "name": "Check if a user is protected",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/protected",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "protected"
+              ],
+              "query": []
+            },
+            "description": "Check if a user is protected"
+          },
+          "response": []
+        },
+        {
+          "name": "Get join date of a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/joined",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "joined"
+              ],
+              "query": []
+            },
+            "description": "Get join date of a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get internal ID of a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "id"
+              ],
+              "query": []
+            },
+            "description": "Get internal ID of a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get a short text summary of a profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/summary",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "summary"
+              ],
+              "query": []
+            },
+            "description": "Get a short text summary of a profile"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the pinned tweet of a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/pinned",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "pinned"
+              ],
+              "query": []
+            },
+            "description": "Get the pinned tweet of a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Check if a username exists",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/exists",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "exists"
+              ],
+              "query": []
+            },
+            "description": "Check if a username exists"
+          },
+          "response": []
+        },
+        {
+          "name": "Get profile + recent tweets in one call",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/combined",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "combined"
+              ],
+              "query": []
+            },
+            "description": "Get profile + recent tweets in one call"
+          },
+          "response": []
+        },
+        {
+          "name": "Get follower/following ratio of a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/ratio",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "ratio"
+              ],
+              "query": []
+            },
+            "description": "Get follower/following ratio of a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get a basic influence score for a user (0-100)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/influence-score",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "influence-score"
+              ],
+              "query": []
+            },
+            "description": "Get a basic influence score for a user (0-100)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get profiles for multiple users at once",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/bulk",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                "bulk"
+              ],
+              "query": []
+            },
+            "description": "Get profiles for multiple users at once"
+          },
+          "response": []
+        },
+        {
+          "name": "Get account age in days",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/age",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "age"
+              ],
+              "query": []
+            },
+            "description": "Get account age in days"
+          },
+          "response": []
+        },
+        {
+          "name": "Get HD avatar URL (Twitter returns _400x400 by default; this returns original)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/avatar-hd",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "avatar-hd"
+              ],
+              "query": []
+            },
+            "description": "Get HD avatar URL (Twitter returns _400x400 by default; this returns original)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get HD banner URL",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/:username/banner-hd",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                ":username",
+                "banner-hd"
+              ],
+              "query": []
+            },
+            "description": "Get HD banner URL"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Replies & Comments",
+      "item": [
+        {
+          "name": "Get replies to a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id"
+              ],
+              "query": []
+            },
+            "description": "Returns the most recent replies to a tweet. The thread may be flat or nested depending on the provider."
+          },
+          "response": []
+        },
+        {
+          "name": "Get latest replies to a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id/latest",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id",
+                "latest"
+              ],
+              "query": []
+            },
+            "description": "Get latest replies to a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the full reply tree of a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id/tree",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id",
+                "tree"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Page size (1-100)"
+                }
+              ]
+            },
+            "description": "Returns all replies in the conversation thread. May be limited by provider."
+          },
+          "response": []
+        },
+        {
+          "name": "Get the reply count of a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id/count",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id",
+                "count"
+              ],
+              "query": []
+            },
+            "description": "Get the reply count of a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get replies from verified accounts only",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id/by-verified",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id",
+                "by-verified"
+              ],
+              "query": []
+            },
+            "description": "Get replies from verified accounts only"
+          },
+          "response": []
+        },
+        {
+          "name": "Get replies from the original tweet's author only",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id/by-author",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id",
+                "by-author"
+              ],
+              "query": []
+            },
+            "description": "Get replies from the original tweet's author only"
+          },
+          "response": []
+        },
+        {
+          "name": "Get replies likely from followers (best-effort, uses verified as proxy)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id/by-followers",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id",
+                "by-followers"
+              ],
+              "query": []
+            },
+            "description": "Get replies likely from followers (best-effort, uses verified as proxy)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get replies from accounts with high follower counts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id/by-influencers",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id",
+                "by-influencers"
+              ],
+              "query": []
+            },
+            "description": "Get replies from accounts with high follower counts"
+          },
+          "response": []
+        },
+        {
+          "name": "Get replies that contain media",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id/with-media",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id",
+                "with-media"
+              ],
+              "query": []
+            },
+            "description": "Get replies that contain media"
+          },
+          "response": []
+        },
+        {
+          "name": "Get replies that contain photos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id/with-photos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id",
+                "with-photos"
+              ],
+              "query": []
+            },
+            "description": "Get replies that contain photos"
+          },
+          "response": []
+        },
+        {
+          "name": "Get replies that contain videos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id/with-videos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id",
+                "with-videos"
+              ],
+              "query": []
+            },
+            "description": "Get replies that contain videos"
+          },
+          "response": []
+        },
+        {
+          "name": "Get replies that contain URLs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id/with-links",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id",
+                "with-links"
+              ],
+              "query": []
+            },
+            "description": "Get replies that contain URLs"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the most popular replies (sorted by likes)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id/popular",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id",
+                "popular"
+              ],
+              "query": []
+            },
+            "description": "Get the most popular replies (sorted by likes)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get replies with the most engagement (replies + retweets)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id/controversial",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id",
+                "controversial"
+              ],
+              "query": []
+            },
+            "description": "Get replies with the most engagement (replies + retweets)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get replies with positive sentiment markers :) (heuristic)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id/positive",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id",
+                "positive"
+              ],
+              "query": []
+            },
+            "description": "Get replies with positive sentiment markers :) (heuristic)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get replies with negative sentiment markers :( (heuristic)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id/negative",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id",
+                "negative"
+              ],
+              "query": []
+            },
+            "description": "Get replies with negative sentiment markers :( (heuristic)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get replies that are questions (contain ?)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id/questions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id",
+                "questions"
+              ],
+              "query": []
+            },
+            "description": "Get replies that are questions (contain ?)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get replies in a specific language",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id/by-lang/:lang",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id",
+                "by-lang",
+                ":lang"
+              ],
+              "query": []
+            },
+            "description": "Get replies in a specific language"
+          },
+          "response": []
+        },
+        {
+          "name": "Get oldest replies to a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id/oldest",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id",
+                "oldest"
+              ],
+              "query": []
+            },
+            "description": "Get oldest replies to a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the conversation thread (self-replies) of a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id/thread",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id",
+                "thread"
+              ],
+              "query": []
+            },
+            "description": "Get the conversation thread (self-replies) of a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets that quote-tweeted this tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id/quoted",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id",
+                "quoted"
+              ],
+              "query": []
+            },
+            "description": "Get tweets that quote-tweeted this tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the parent tweet + immediate replies (context view)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id/context",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id",
+                "context"
+              ],
+              "query": []
+            },
+            "description": "Get the parent tweet + immediate replies (context view)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the conversation ID of a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id/conversation-id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id",
+                "conversation-id"
+              ],
+              "query": []
+            },
+            "description": "Get the conversation ID of a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the root tweet of a conversation (follows in_reply_to chain)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/replies/:tweet_id/root",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "replies",
+                ":tweet_id",
+                "root"
+              ],
+              "query": []
+            },
+            "description": "Get the root tweet of a conversation (follows in_reply_to chain)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Mentions",
+      "item": [
+        {
+          "name": "Get tweets mentioning a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/mentions/:username",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "mentions",
+                ":username"
+              ],
+              "query": []
+            },
+            "description": "Returns recent tweets that @-mention a user. Uses search across multiple providers (Nitter, twscrape, syndication)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get latest mentions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/mentions/:username/latest",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "mentions",
+                ":username",
+                "latest"
+              ],
+              "query": []
+            },
+            "description": "Get latest mentions"
+          },
+          "response": []
+        },
+        {
+          "name": "Get top mentions (most liked)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/mentions/:username/top",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "mentions",
+                ":username",
+                "top"
+              ],
+              "query": []
+            },
+            "description": "Get top mentions (most liked)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get mentions from verified accounts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/mentions/:username/from-verified",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "mentions",
+                ":username",
+                "from-verified"
+              ],
+              "query": []
+            },
+            "description": "Get mentions from verified accounts"
+          },
+          "response": []
+        },
+        {
+          "name": "Get mentions containing media",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/mentions/:username/with-media",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "mentions",
+                ":username",
+                "with-media"
+              ],
+              "query": []
+            },
+            "description": "Get mentions containing media"
+          },
+          "response": []
+        },
+        {
+          "name": "Get mentions containing photos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/mentions/:username/with-photos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "mentions",
+                ":username",
+                "with-photos"
+              ],
+              "query": []
+            },
+            "description": "Get mentions containing photos"
+          },
+          "response": []
+        },
+        {
+          "name": "Get mentions containing videos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/mentions/:username/with-videos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "mentions",
+                ":username",
+                "with-videos"
+              ],
+              "query": []
+            },
+            "description": "Get mentions containing videos"
+          },
+          "response": []
+        },
+        {
+          "name": "Get mentions containing URLs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/mentions/:username/with-links",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "mentions",
+                ":username",
+                "with-links"
+              ],
+              "query": []
+            },
+            "description": "Get mentions containing URLs"
+          },
+          "response": []
+        },
+        {
+          "name": "Get mentions in a specific language",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/mentions/:username/by-lang/:lang",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "mentions",
+                ":username",
+                "by-lang",
+                ":lang"
+              ],
+              "query": []
+            },
+            "description": "Get mentions in a specific language"
+          },
+          "response": []
+        },
+        {
+          "name": "Get mentions since a date",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/mentions/:username/since/:since",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "mentions",
+                ":username",
+                "since",
+                ":since"
+              ],
+              "query": []
+            },
+            "description": "Get mentions since a date"
+          },
+          "response": []
+        },
+        {
+          "name": "Get mentions until a date",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/mentions/:username/until/:until",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "mentions",
+                ":username",
+                "until",
+                ":until"
+              ],
+              "query": []
+            },
+            "description": "Get mentions until a date"
+          },
+          "response": []
+        },
+        {
+          "name": "Get mentions that are questions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/mentions/:username/questions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "mentions",
+                ":username",
+                "questions"
+              ],
+              "query": []
+            },
+            "description": "Get mentions that are questions"
+          },
+          "response": []
+        },
+        {
+          "name": "Get positive mentions (heuristic)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/mentions/:username/positive",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "mentions",
+                ":username",
+                "positive"
+              ],
+              "query": []
+            },
+            "description": "Get positive mentions (heuristic)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get negative mentions (heuristic)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/mentions/:username/negative",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "mentions",
+                ":username",
+                "negative"
+              ],
+              "query": []
+            },
+            "description": "Get negative mentions (heuristic)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get count of recent mentions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/mentions/:username/count",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "mentions",
+                ":username",
+                "count"
+              ],
+              "query": []
+            },
+            "description": "Get count of recent mentions"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Trends",
+      "item": [
+        {
+          "name": "Get current trends",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trends",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trends"
+              ],
+              "query": []
+            },
+            "description": "Returns the current trending topics. Optional WOEID for geo-specific trends."
+          },
+          "response": []
+        },
+        {
+          "name": "Get global trends (woeid=1)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trends/global",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trends",
+                "global"
+              ],
+              "query": []
+            },
+            "description": "Get global trends (woeid=1)"
+          },
+          "response": []
+        },
+        {
+          "name": "Alias of /trends/global",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trends/worldwide",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trends",
+                "worldwide"
+              ],
+              "query": []
+            },
+            "description": "Alias of /trends/global"
+          },
+          "response": []
+        },
+        {
+          "name": "Get US trends (woeid=23424977)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trends/us",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trends",
+                "us"
+              ],
+              "query": []
+            },
+            "description": "Get US trends (woeid=23424977)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get UK trends (woeid=23424975)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trends/uk",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trends",
+                "uk"
+              ],
+              "query": []
+            },
+            "description": "Get UK trends (woeid=23424975)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Japan trends (woeid=23424956)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trends/japan",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trends",
+                "japan"
+              ],
+              "query": []
+            },
+            "description": "Get Japan trends (woeid=23424956)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get India trends (woeid=23424848)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trends/india",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trends",
+                "india"
+              ],
+              "query": []
+            },
+            "description": "Get India trends (woeid=23424848)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Brazil trends (woeid=23424768)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trends/brazil",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trends",
+                "brazil"
+              ],
+              "query": []
+            },
+            "description": "Get Brazil trends (woeid=23424768)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Germany trends (woeid=23424829)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trends/germany",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trends",
+                "germany"
+              ],
+              "query": []
+            },
+            "description": "Get Germany trends (woeid=23424829)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get France trends (woeid=23424819)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trends/france",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trends",
+                "france"
+              ],
+              "query": []
+            },
+            "description": "Get France trends (woeid=23424819)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Canada trends (woeid=23424775)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trends/canada",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trends",
+                "canada"
+              ],
+              "query": []
+            },
+            "description": "Get Canada trends (woeid=23424775)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Australia trends (woeid=23424748)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trends/australia",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trends",
+                "australia"
+              ],
+              "query": []
+            },
+            "description": "Get Australia trends (woeid=23424748)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Nigeria trends (woeid=23424908)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trends/nigeria",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trends",
+                "nigeria"
+              ],
+              "query": []
+            },
+            "description": "Get Nigeria trends (woeid=23424908)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the top N trends",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trends/top/:n",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trends",
+                "top",
+                ":n"
+              ],
+              "query": []
+            },
+            "description": "Get the top N trends"
+          },
+          "response": []
+        },
+        {
+          "name": "Get trends sorted by tweet volume (descending)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trends/by-volume",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trends",
+                "by-volume"
+              ],
+              "query": []
+            },
+            "description": "Get trends sorted by tweet volume (descending)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Media",
+      "item": [
+        {
+          "name": "Get all media attached to a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/media/tweet/:tweet_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "media",
+                "tweet",
+                ":tweet_id"
+              ],
+              "query": []
+            },
+            "description": "Get all media attached to a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get photos attached to a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/media/tweet/:tweet_id/photos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "media",
+                "tweet",
+                ":tweet_id",
+                "photos"
+              ],
+              "query": []
+            },
+            "description": "Get photos attached to a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get videos attached to a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/media/tweet/:tweet_id/videos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "media",
+                "tweet",
+                ":tweet_id",
+                "videos"
+              ],
+              "query": []
+            },
+            "description": "Get videos attached to a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get animated GIFs attached to a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/media/tweet/:tweet_id/gifs",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "media",
+                "tweet",
+                ":tweet_id",
+                "gifs"
+              ],
+              "query": []
+            },
+            "description": "Get animated GIFs attached to a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the first photo of a tweet (preview-friendly)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/media/tweet/:tweet_id/first-photo",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "media",
+                "tweet",
+                ":tweet_id",
+                "first-photo"
+              ],
+              "query": []
+            },
+            "description": "Get the first photo of a tweet (preview-friendly)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the first video of a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/media/tweet/:tweet_id/first-video",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "media",
+                "tweet",
+                ":tweet_id",
+                "first-video"
+              ],
+              "query": []
+            },
+            "description": "Get the first video of a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get thumbnail URLs for all media in a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/media/tweet/:tweet_id/thumbnails",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "media",
+                "tweet",
+                ":tweet_id",
+                "thumbnails"
+              ],
+              "query": []
+            },
+            "description": "Get thumbnail URLs for all media in a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the count of media items in a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/media/tweet/:tweet_id/count",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "media",
+                "tweet",
+                ":tweet_id",
+                "count"
+              ],
+              "query": []
+            },
+            "description": "Get the count of media items in a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets with media from a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/media/user/:username",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "media",
+                "user",
+                ":username"
+              ],
+              "query": []
+            },
+            "description": "Get tweets with media from a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets containing photos from a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/media/user/:username/photos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "media",
+                "user",
+                ":username",
+                "photos"
+              ],
+              "query": []
+            },
+            "description": "Get tweets containing photos from a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets containing videos from a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/media/user/:username/videos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "media",
+                "user",
+                ":username",
+                "videos"
+              ],
+              "query": []
+            },
+            "description": "Get tweets containing videos from a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get all photo URLs from a user's recent tweets",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/media/user/:username/all-photos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "media",
+                "user",
+                ":username",
+                "all-photos"
+              ],
+              "query": []
+            },
+            "description": "Get all photo URLs from a user's recent tweets"
+          },
+          "response": []
+        },
+        {
+          "name": "Get all video URLs from a user's recent tweets",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/media/user/:username/all-videos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "media",
+                "user",
+                ":username",
+                "all-videos"
+              ],
+              "query": []
+            },
+            "description": "Get all video URLs from a user's recent tweets"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the avatar URL of a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/media/user/:username/avatar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "media",
+                "user",
+                ":username",
+                "avatar"
+              ],
+              "query": []
+            },
+            "description": "Get the avatar URL of a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the banner URL of a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/media/user/:username/banner",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "media",
+                "user",
+                ":username",
+                "banner"
+              ],
+              "query": []
+            },
+            "description": "Get the banner URL of a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get HD avatar URL of a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/media/user/:username/avatar-hd",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "media",
+                "user",
+                ":username",
+                "avatar-hd"
+              ],
+              "query": []
+            },
+            "description": "Get HD avatar URL of a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Search for tweets containing media matching a query",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/media/search",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "media",
+                "search"
+              ],
+              "query": []
+            },
+            "description": "Search for tweets containing media matching a query"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the most-viewed media tweets from a user (sorted by views)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/media/user/:username/most-viewed",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "media",
+                "user",
+                ":username",
+                "most-viewed"
+              ],
+              "query": []
+            },
+            "description": "Get the most-viewed media tweets from a user (sorted by views)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Quotes",
+      "item": [
+        {
+          "name": "Get quote tweets of a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/quotes/:tweet_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "quotes",
+                ":tweet_id"
+              ],
+              "query": []
+            },
+            "description": "Returns tweets that quoted the given tweet."
+          },
+          "response": []
+        },
+        {
+          "name": "Get latest quote tweets of a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/quotes/:tweet_id/latest",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "quotes",
+                ":tweet_id",
+                "latest"
+              ],
+              "query": []
+            },
+            "description": "Get latest quote tweets of a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get most popular quote tweets (by likes)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/quotes/:tweet_id/top",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "quotes",
+                ":tweet_id",
+                "top"
+              ],
+              "query": []
+            },
+            "description": "Get most popular quote tweets (by likes)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get quote tweets from verified accounts only",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/quotes/:tweet_id/by-verified",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "quotes",
+                ":tweet_id",
+                "by-verified"
+              ],
+              "query": []
+            },
+            "description": "Get quote tweets from verified accounts only"
+          },
+          "response": []
+        },
+        {
+          "name": "Get quote tweets that contain media",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/quotes/:tweet_id/with-media",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "quotes",
+                ":tweet_id",
+                "with-media"
+              ],
+              "query": []
+            },
+            "description": "Get quote tweets that contain media"
+          },
+          "response": []
+        },
+        {
+          "name": "Get quote tweets containing photos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/quotes/:tweet_id/with-photos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "quotes",
+                ":tweet_id",
+                "with-photos"
+              ],
+              "query": []
+            },
+            "description": "Get quote tweets containing photos"
+          },
+          "response": []
+        },
+        {
+          "name": "Get quote tweets containing videos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/quotes/:tweet_id/with-videos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "quotes",
+                ":tweet_id",
+                "with-videos"
+              ],
+              "query": []
+            },
+            "description": "Get quote tweets containing videos"
+          },
+          "response": []
+        },
+        {
+          "name": "Get positive quote tweets (heuristic)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/quotes/:tweet_id/positive",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "quotes",
+                ":tweet_id",
+                "positive"
+              ],
+              "query": []
+            },
+            "description": "Get positive quote tweets (heuristic)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get negative quote tweets (heuristic)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/quotes/:tweet_id/negative",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "quotes",
+                ":tweet_id",
+                "negative"
+              ],
+              "query": []
+            },
+            "description": "Get negative quote tweets (heuristic)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get quote tweets in a specific language",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/quotes/:tweet_id/by-lang/:lang",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "quotes",
+                ":tweet_id",
+                "by-lang",
+                ":lang"
+              ],
+              "query": []
+            },
+            "description": "Get quote tweets in a specific language"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the quote count of a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/quotes/:tweet_id/count",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "quotes",
+                ":tweet_id",
+                "count"
+              ],
+              "query": []
+            },
+            "description": "Get the quote count of a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get quote tweets since a date",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/quotes/:tweet_id/since/:since",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "quotes",
+                ":tweet_id",
+                "since",
+                ":since"
+              ],
+              "query": []
+            },
+            "description": "Get quote tweets since a date"
+          },
+          "response": []
+        },
+        {
+          "name": "Get quote tweets until a date",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/quotes/:tweet_id/until/:until",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "quotes",
+                ":tweet_id",
+                "until",
+                ":until"
+              ],
+              "query": []
+            },
+            "description": "Get quote tweets until a date"
+          },
+          "response": []
+        },
+        {
+          "name": "Get oldest quote tweets",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/quotes/:tweet_id/oldest",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "quotes",
+                ":tweet_id",
+                "oldest"
+              ],
+              "query": []
+            },
+            "description": "Get oldest quote tweets"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the original tweet that this quote-tweet quotes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/quotes/:tweet_id/context",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "quotes",
+                ":tweet_id",
+                "context"
+              ],
+              "query": []
+            },
+            "description": "Get the original tweet that this quote-tweet quotes"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Tweet Shortcuts",
+      "item": [
+        {
+          "name": "Get a single tweet by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/:tweet_id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                ":tweet_id"
+              ],
+              "query": []
+            },
+            "description": "Returns a single tweet with full metadata: text, author, media, engagement counts, hashtags, mentions, URLs, quoted/retweeted tweet. Tries providers in priority order (syndication \u2192 composable \u2192 nitter)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets from a user's timeline",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/user/:username",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "user",
+                ":username"
+              ],
+              "query": []
+            },
+            "description": "Returns the most recent tweets posted by a user. Paginated with cursor. Default page size 20, max 100."
+          },
+          "response": []
+        },
+        {
+          "name": "Get latest tweets from a user (alias of /user)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/user/:username/latest",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "user",
+                ":username",
+                "latest"
+              ],
+              "query": []
+            },
+            "description": "Get latest tweets from a user (alias of /user)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets containing media (photos/videos) from a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/user/:username/media",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "user",
+                ":username",
+                "media"
+              ],
+              "query": []
+            },
+            "description": "Get tweets containing media (photos/videos) from a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets containing photos from a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/user/:username/photos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "user",
+                ":username",
+                "photos"
+              ],
+              "query": []
+            },
+            "description": "Get tweets containing photos from a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets containing videos from a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/user/:username/videos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "user",
+                ":username",
+                "videos"
+              ],
+              "query": []
+            },
+            "description": "Get tweets containing videos from a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets containing animated GIFs from a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/user/:username/gifs",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "user",
+                ":username",
+                "gifs"
+              ],
+              "query": []
+            },
+            "description": "Get tweets containing animated GIFs from a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get replies posted by a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/user/:username/replies",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "user",
+                ":username",
+                "replies"
+              ],
+              "query": []
+            },
+            "description": "Get replies posted by a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get original tweets (no replies, no retweets) from a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/user/:username/original",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "user",
+                ":username",
+                "original"
+              ],
+              "query": []
+            },
+            "description": "Get original tweets (no replies, no retweets) from a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get retweets posted by a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/user/:username/retweets",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "user",
+                ":username",
+                "retweets"
+              ],
+              "query": []
+            },
+            "description": "Get retweets posted by a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get quote-tweets posted by a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/user/:username/quotes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "user",
+                ":username",
+                "quotes"
+              ],
+              "query": []
+            },
+            "description": "Get quote-tweets posted by a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get text-only tweets (no media) from a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/user/:username/text-only",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "user",
+                ":username",
+                "text-only"
+              ],
+              "query": []
+            },
+            "description": "Get text-only tweets (no media) from a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets from verified users only (filter applied to timeline)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/user/:username/verified",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "user",
+                ":username",
+                "verified"
+              ],
+              "query": []
+            },
+            "description": "Get tweets from verified users only (filter applied to timeline)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get a user's pinned tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/user/:username/pinned",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "user",
+                ":username",
+                "pinned"
+              ],
+              "query": []
+            },
+            "description": "Get a user's pinned tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get raw tweet data (no normalization)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/id/:tweet_id/raw",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "id",
+                ":tweet_id",
+                "raw"
+              ],
+              "query": []
+            },
+            "description": "Get raw tweet data (no normalization)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get only the text content of a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/id/:tweet_id/text",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "id",
+                ":tweet_id",
+                "text"
+              ],
+              "query": []
+            },
+            "description": "Get only the text content of a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the author of a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/id/:tweet_id/author",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "id",
+                ":tweet_id",
+                "author"
+              ],
+              "query": []
+            },
+            "description": "Get the author of a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get engagement stats (replies, retweets, likes, quotes, views)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/id/:tweet_id/stats",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "id",
+                ":tweet_id",
+                "stats"
+              ],
+              "query": []
+            },
+            "description": "Get engagement stats (replies, retweets, likes, quotes, views)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get hashtags used in a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/id/:tweet_id/hashtags",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "id",
+                ":tweet_id",
+                "hashtags"
+              ],
+              "query": []
+            },
+            "description": "Get hashtags used in a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get users mentioned in a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/id/:tweet_id/mentions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "id",
+                ":tweet_id",
+                "mentions"
+              ],
+              "query": []
+            },
+            "description": "Get users mentioned in a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get URLs contained in a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/id/:tweet_id/urls",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "id",
+                ":tweet_id",
+                "urls"
+              ],
+              "query": []
+            },
+            "description": "Get URLs contained in a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the conversation thread containing a tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/id/:tweet_id/conversation",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "id",
+                ":tweet_id",
+                "conversation"
+              ],
+              "query": []
+            },
+            "description": "Get the conversation thread containing a tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the tweet quoted by this tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/id/:tweet_id/quoted",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "id",
+                ":tweet_id",
+                "quoted"
+              ],
+              "query": []
+            },
+            "description": "Get the tweet quoted by this tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get the tweet retweeted by this tweet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/id/:tweet_id/retweeted",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "id",
+                ":tweet_id",
+                "retweeted"
+              ],
+              "query": []
+            },
+            "description": "Get the tweet retweeted by this tweet"
+          },
+          "response": []
+        },
+        {
+          "name": "Fetch multiple tweets by IDs (comma-separated)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/ids",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "ids"
+              ],
+              "query": []
+            },
+            "description": "Fetch multiple tweets by IDs (comma-separated)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets from a user within a date range (filter applied)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/by-date",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "by-date"
+              ],
+              "query": []
+            },
+            "description": "Get tweets from a user within a date range (filter applied)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets from a user filtered by language code",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/by-language",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "by-language"
+              ],
+              "query": []
+            },
+            "description": "Get tweets from a user filtered by language code"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets from a user containing a specific hashtag",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/by-hashtag",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "by-hashtag"
+              ],
+              "query": []
+            },
+            "description": "Get tweets from a user containing a specific hashtag"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets from a user mentioning a specific user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/by-mention",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "by-mention"
+              ],
+              "query": []
+            },
+            "description": "Get tweets from a user mentioning a specific user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets from a user with at least N likes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/by-min-likes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "by-min-likes"
+              ],
+              "query": []
+            },
+            "description": "Get tweets from a user with at least N likes"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets from a user with at least N retweets",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/by-min-retweets",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "by-min-retweets"
+              ],
+              "query": []
+            },
+            "description": "Get tweets from a user with at least N retweets"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets from a user with at least N views",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/by-min-views",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "by-min-views"
+              ],
+              "query": []
+            },
+            "description": "Get tweets from a user with at least N views"
+          },
+          "response": []
+        },
+        {
+          "name": "Get most popular tweets from a user (sorted by likes)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/popular/:username",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "popular",
+                ":username"
+              ],
+              "query": []
+            },
+            "description": "Get most popular tweets from a user (sorted by likes)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets from a user posted via a specific source app",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/by-source",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "by-source"
+              ],
+              "query": []
+            },
+            "description": "Get tweets from a user posted via a specific source app"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets flagged as sensitive from a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/sensitive/:username",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "sensitive",
+                ":username"
+              ],
+              "query": []
+            },
+            "description": "Get tweets flagged as sensitive from a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get tweets from a user excluding sensitive content",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tweet/posts/clean/:username",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tweet",
+                "posts",
+                "clean",
+                ":username"
+              ],
+              "query": []
+            },
+            "description": "Get tweets from a user excluding sensitive content"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

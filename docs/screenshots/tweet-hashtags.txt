@@ -1,0 +1,13 @@
+===== GET /posts/id/20/hashtags =====
+Status: 200
+X-Powered-By: blitzyxsc 1.0.0
+X-Author: blitzlabx
+
+{
+  "hashtags": [],
+  "provider": {
+    "name": "composable",
+    "latency_ms": 245.9339310003088,
+    "ok": true
+  }
+}

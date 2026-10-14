@@ -1,0 +1,16 @@
+===== GET /search?q=ai&limit=3 =====
+Status: 200
+X-Powered-By: blitzyxsc 1.0.0
+X-Author: blitzlabx
+
+{
+  "data": [],
+  "provider": {
+    "name": "nitter",
+    "latency_ms": 607.1143589997519,
+    "ok": true
+  },
+  "count": 0,
+  "next_cursor": null,
+  "previous_cursor": null
+}

@@ -1,0 +1,21 @@
+===== GET /posts/id/20/stats =====
+Status: 200
+X-Powered-By: blitzyxsc 1.0.0
+X-Author: blitzlabx
+
+{
+  "data": {
+    "id": "20",
+    "reply_count": 18089,
+    "retweet_count": 124640,
+    "like_count": 309872,
+    "quote_count": 7308,
+    "view_count": null,
+    "bookmark_count": null
+  },
+  "provider": {
+    "name": "composable",
+    "latency_ms": 240.3670990001956,
+    "ok": true
+  }
+}

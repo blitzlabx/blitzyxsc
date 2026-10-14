@@ -1,0 +1,144 @@
+---
+title: Architecture
+description: How the multi-provider router works under the hood.
+---
+
+# Architecture
+
+`blitzyxsc` is built around a **multi-provider router** that fans out each request across multiple public X data sources and returns the first successful response. This gives you:
+
+- **High availability** — if one source is down or rate-limited, others pick up
+- **No auth** — every source is unauthenticated
+- **No ban risk** — no login, no cookies, no scraping of authenticated pages
+
+## High-level flow
+
+```
+Client request
+    ↓
+[Router layer] — 220 endpoints across 8 routers
+    ↓
+[Provider registry] — call_with_fallback()
+    ↓ tries each in order:
+    1. composable (fxtwitter) → success? return ✓
+    2. syndication (Twitter CDN) → success? return ✓
+    3. nitter (public mirrors) → success? return ✓
+    4. twscrape (if installed) → success? return ✓
+    5. snscrape (if installed) → success? return ✓
+    6. rss (oEmbed fallback) → success? return ✓
+    ↓ if all fail:
+    raise ProviderError → 502 Bad Gateway
+```
+
+## The router layer
+
+Each router is responsible for one category of endpoints:
+
+| Router | Prefix | Endpoints | Examples |
+|--------|--------|-----------|----------|
+| Posts & Timeline | `/posts` | 35 | Single tweet, user timeline, filtered variants |
+| Search | `/search` | 30 | Keyword, advanced, by hashtag/user/lang/date |
+| Profile | `/profile` | 30 | Full profile, sub-resources (bio, avatar, stats) |
+| Replies & Comments | `/replies` | 25 | Thread, tree, popular, by language |
+| Mentions | `/mentions` | 15 | Tweets mentioning a user, with filters |
+| Trends | `/trends` | 15 | Current trends by country |
+| Media | `/media` | 20 | Photos, videos, GIFs from tweets/users |
+| Quotes | `/quotes` | 15 | Quote tweets with filters |
+| Meta | `/` | 5 | Health, providers, playground |
+
+Total: **220 endpoints**.
+
+Routers are pure HTTP handlers — they validate input, call the provider registry, and return the response. They don't know which provider will actually serve the request.
+
+## The provider registry
+
+The registry is the heart of blitzyxsc. It exposes a single method:
+
+```python
+result, provider_info = await registry.call_with_fallback("get_tweet", tweet_id)
+```
+
+Behind the scenes:
+
+1. Iterate `settings.provider_order` (default: `["composable", "syndication", "nitter", "twscrape", "snscrape", "rss"]`)
+2. For each provider, call the requested method (e.g., `get_tweet`)
+3. If it succeeds, return `(result, ProviderInfo(name=..., ok=True, latency_ms=...))`
+4. If it raises `ProviderError`, log and try the next provider
+5. If all providers fail, raise `ProviderError` → router returns 502
+
+This means you can swap the priority order at runtime via env var:
+
+```bash
+export BLITZYXSC_PROVIDER_ORDER='["nitter","composable"]'
+```
+
+## Provider interface
+
+Every provider implements the same abstract base class:
+
+```python
+class BaseProvider(abc.ABC):
+    name: str
+
+    async def get_tweet(self, tweet_id: str) -> Tweet: ...
+    async def get_user_tweets(self, username: str, limit: int, cursor: str | None) -> list[Tweet]: ...
+    async def get_profile(self, username: str) -> Profile: ...
+    async def search_tweets(self, query: str, limit: int, cursor: str | None, sort: str, filters: dict | None) -> list[Tweet]: ...
+    async def get_replies(self, tweet_id: str, limit: int, cursor: str | None) -> list[Tweet]: ...
+    async def get_mentions(self, username: str, limit: int, cursor: str | None) -> list[Tweet]: ...
+    async def get_quotes(self, tweet_id: str, limit: int, cursor: str | None) -> list[Tweet]: ...
+    async def get_trends(self, woeid: int | None, location: str | None) -> list[Trend]: ...
+    async def get_media(self, identifier: str, by: str, media_type: str | None) -> list[MediaItem]: ...
+    async def health(self) -> bool: ...
+```
+
+Not every provider implements every method — if a provider doesn't support an endpoint, it raises `ProviderError` immediately, and the registry falls through to the next provider.
+
+For example, `ComposableProvider` (fxtwitter) only supports `get_tweet` and `get_profile` — it doesn't support search or trends. `NitterProvider` supports everything except single-tweet fetches.
+
+## Response normalization
+
+Every provider parses its source's response format into the same normalized `Tweet` / `Profile` schema (defined in `schemas/models.py`). This means the JSON you get from `GET /posts/20` is identical regardless of whether the request was served by fxtwitter, syndication, or Nitter.
+
+The normalized schema includes:
+
+- `id`, `text`, `author`, `created_at`, `language`, `source`
+- `reply_count`, `retweet_count`, `like_count`, `quote_count`, `view_count`, `bookmark_count`
+- `media[]` (photos, videos, GIFs with URLs, dimensions, durations)
+- `urls[]`, `hashtags[]`, `mentions[]`, `cashtags[]`
+- `conversation_id`, `in_reply_to` (for threading)
+- `is_quote`, `quoted_tweet` (nested)
+- `is_retweet`, `retweeted_tweet` (nested)
+- `url` (canonical X URL)
+- `sensitive` (bool)
+
+And every response is wrapped in an envelope:
+
+```json
+{
+  "data": <Tweet | Profile | [Tweet] | ...>,
+  "provider": {
+    "name": "composable",
+    "ok": true,
+    "latency_ms": 254.32
+  },
+  "count": <int>   // for list responses
+}
+```
+
+The `provider` field tells you which source actually served the request — useful for debugging and analytics.
+
+## Caching (future)
+
+Currently blitzyxsc does not cache responses across requests. Each request hits the upstream source(s) fresh. This is intentional for v1 — it ensures you always get fresh data.
+
+A future v2 may add an optional Redis or in-memory cache with a configurable TTL (`BLITZYXSC_CACHE_TTL_SECONDS`). See `config.py` for the placeholder.
+
+## Concurrency model
+
+- **Python**: async/await with `httpx.AsyncClient`. Each request creates a fresh client (per-call) to avoid event-loop binding issues with TestClient and serverless deployments.
+- **TypeScript**: native `fetch` (Node 18+), no shared client state.
+- **Node.js**: native `fetch` (Node 18+), no shared client state.
+- **Go**: standard `net/http.Client` with per-request timeouts.
+
+All implementations are stateless and safe for concurrent use.

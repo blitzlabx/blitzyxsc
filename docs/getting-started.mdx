@@ -1,0 +1,113 @@
+---
+title: Getting Started
+description: Install blitzyxsc and make your first request in under 60 seconds.
+---
+
+# Getting Started
+
+`blitzyxsc` is an auth-free X/Twitter scraping API available in **4 languages**: Python (FastAPI), TypeScript (Next.js), Node.js (Express), and Go. Pick whichever fits your stack — they all expose the same endpoints with the same JSON response shape.
+
+## Prerequisites
+
+- Any modern OS (Linux, macOS, Windows)
+- For Python: Python 3.10+
+- For TypeScript/Node.js: Node.js 18+ and npm
+- For Go: Go 1.21+
+- An internet connection (no API keys required)
+
+## Quick install
+
+### Python (FastAPI) — primary
+
+```bash
+git clone https://github.com/blitzlabx/blitzyxsc.git
+cd blitzyxsc/py
+pip install -r requirements.txt
+```
+
+### TypeScript (Next.js)
+
+```bash
+cd blitzyxsc/ts
+npm install
+```
+
+### Node.js (Express)
+
+```bash
+cd blitzyxsc/node
+npm install
+```
+
+### Go
+
+```bash
+cd blitzyxsc/go
+go build -o blitzyxsc .
+```
+
+## First request
+
+Start the server (using Python as an example):
+
+```bash
+uvicorn blitzyxsc_api.main:app --reload
+# → blitzyxsc v1.0.0 listening on http://localhost:8000
+```
+
+Then make your first request:
+
+```bash
+curl http://localhost:8000/posts/20
+```
+
+Response:
+
+```json
+{
+  "data": {
+    "id": "20",
+    "text": "just setting up my twttr",
+    "author": {
+      "id": "12",
+      "username": "jack",
+      "display_name": "jack"
+    },
+    "created_at": "2006-03-21T20:50:14Z",
+    "like_count": 309872,
+    "retweet_count": 124640,
+    "reply_count": 18089,
+    "url": "https://x.com/jack/status/20"
+  },
+  "provider": {
+    "name": "composable",
+    "ok": true,
+    "latency_ms": 254.32
+  }
+}
+```
+
+That's it — no auth, no API key, no OAuth flow. Just a `GET` request and you have full tweet data including engagement counts.
+
+## Try the playground
+
+Every implementation ships with a built-in interactive playground:
+
+- Python: http://localhost:8000/playground
+- TypeScript: http://localhost:3000/playground
+- Node.js: http://localhost:3001/playground
+- Go: http://localhost:8080/playground
+
+Click any endpoint in the sidebar, fill in the path params, hit **Send**, and see the live JSON response with syntax highlighting. The playground also reports which provider served the request and the latency.
+
+## Swagger docs
+
+The Python and TypeScript implementations expose interactive Swagger UI at `/docs` and ReDoc at `/redoc`. These are auto-generated from the same code that defines the endpoints, so they're always up-to-date.
+
+## What's next
+
+- [Architecture](./architecture.mdx) — how the multi-provider router works
+- [Providers](./providers.mdx) — deep-dive into each source
+- [Endpoints](./endpoints.mdx) — full reference
+- [Examples](./examples.mdx) — code snippets in Python, JS, Go, curl
+- [Deployment](./deployment.mdx) — Vercel, Docker, Railway, VPS

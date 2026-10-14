@@ -1,0 +1,33 @@
+{
+  "name": "blitzyxsc-express",
+  "version": "1.0.0",
+  "description": "Auth-free X/Twitter scraping API — Node.js / Express mirror of the FastAPI blitzyxsc service by Blitz (blitzlabx).",
+  "author": "Blitz <blitzlabx>",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/server.js",
+  "homepage": "https://x.com/blitzlabx",
+  "keywords": [
+    "twitter",
+    "x",
+    "scraping",
+    "api",
+    "fxtwitter",
+    "nitter",
+    "syndication",
+    "blitzyxsc",
+    "express",
+    "no-auth"
+  ],
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}

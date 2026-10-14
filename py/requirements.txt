@@ -1,0 +1,18 @@
+fastapi>=0.110.0
+uvicorn[standard]>=0.27.0
+pydantic>=2.6.0
+pydantic-settings>=2.1.0
+httpx>=0.27.0
+python-multipart>=0.0.9
+
+# Optional — uncomment to enable twscrape (guest-account-based scraping)
+# twscrape>=0.12.0
+# Optional — snscrape (legacy, mostly defunct post-2023)
+# snscrape>=0.3.4
+# lxml>=4.9.0
+# beautifulsoup4>=4.12.0
+
+# Dev / test
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
+respx>=0.21.0

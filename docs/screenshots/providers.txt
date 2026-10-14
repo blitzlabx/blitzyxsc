@@ -1,0 +1,41 @@
+===== GET /providers =====
+Status: 200
+X-Powered-By: blitzyxsc 1.0.0
+X-Author: blitzlabx
+
+{
+  "providers": [
+    {
+      "name": "composable",
+      "priority": 1
+    },
+    {
+      "name": "syndication",
+      "priority": 2
+    },
+    {
+      "name": "nitter",
+      "priority": 3
+    },
+    {
+      "name": "twscrape",
+      "priority": 4
+    },
+    {
+      "name": "snscrape",
+      "priority": 5
+    },
+    {
+      "name": "rss",
+      "priority": 6
+    }
+  ],
+  "order": [
+    "composable",
+    "syndication",
+    "nitter",
+    "twscrape",
+    "snscrape",
+    "rss"
+  ]
+}

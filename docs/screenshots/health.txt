@@ -1,0 +1,20 @@
+===== GET /health =====
+Status: 200
+X-Powered-By: blitzyxsc 1.0.0
+X-Author: blitzlabx
+
+{
+  "status": "ok",
+  "brand": "blitzyxsc",
+  "version": "1.0.0",
+  "author": "Blitz <blitzlabx>",
+  "providers": [
+    "syndication",
+    "nitter",
+    "composable",
+    "twscrape",
+    "snscrape",
+    "rss"
+  ],
+  "uptime_seconds": 0.17689037322998047
+}

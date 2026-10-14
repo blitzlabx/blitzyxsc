@@ -1,0 +1,14 @@
+===== GET /posts/id/20/text =====
+Status: 200
+X-Powered-By: blitzyxsc 1.0.0
+X-Author: blitzlabx
+
+{
+  "text": "just setting up my twttr",
+  "id": "20",
+  "provider": {
+    "name": "composable",
+    "latency_ms": 282.57923299997856,
+    "ok": true
+  }
+}

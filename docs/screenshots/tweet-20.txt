@@ -1,0 +1,45 @@
+===== GET /posts/20 =====
+Status: 200
+X-Powered-By: blitzyxsc 1.0.0
+X-Author: blitzlabx
+
+{
+  "data": {
+    "id": "20",
+    "text": "just setting up my twttr",
+    "author": {
+      "id": "12",
+      "username": "jack",
+      "display_name": "jack",
+      "avatar": "https://pbs.twimg.com/profile_images/1661201415899951105/azNjKOSH_200x200.jpg",
+      "verified": null
+    },
+    "created_at": "2006-03-21T20:50:14Z",
+    "language": "en",
+    "source": null,
+    "reply_count": 18089,
+    "retweet_count": 124640,
+    "like_count": 309872,
+    "quote_count": 7308,
+    "bookmark_count": null,
+    "view_count": null,
+    "media": [],
+    "urls": [],
+    "hashtags": [],
+    "mentions": [],
+    "cashtags": [],
+    "conversation_id": null,
+    "in_reply_to": null,
+    "is_quote": false,
+    "quoted_tweet": null,
+    "is_retweet": null,
+    "retweeted_tweet": null,
+    "url": "https://x.com/jack/status/20",
+    "sensitive": null
+  },
+  "provider": {
+    "name": "composable",
+    "latency_ms": 250.35351599990463,
+    "ok": true
+  }
+}

@@ -1,0 +1,97 @@
+===== GET /posts/user/elonmusk?limit=3 =====
+Status: 200
+X-Powered-By: blitzyxsc 1.0.0
+X-Author: blitzlabx
+
+{
+  "data": [
+    {
+      "id": "2110438877274259488",
+      "text": "Try Grok Voice\n\n\nSpaceX Super Intelligence (@SpaceXSI)\n\nIntroducing Grok Voice 3.0, the world\u2019s most intelligent speech-to-speech model.\n\nIt excels at resolving customer calls, responds in under a second, and costs less than other frontier models.\n\n\n\n\n\n\u2014 http://nitter.meowing.monster/SpaceXSI/status/2110416580899168305#m",
+      "author": {
+        "id": null,
+        "username": "elonmusk",
+        "display_name": null,
+        "avatar": null,
+        "verified": null
+      },
+      "created_at": null,
+      "language": null,
+      "source": null,
+      "reply_count": null,
+      "retweet_count": null,
+      "like_count": null,
+      "quote_count": null,
+      "bookmark_count": null,
+      "view_count": null,
+      "media": [
+        {
+          "type": "photo",
+          "url": "http://nitter.meowing.monster/pic/media%2FHUm0LiyW8AAHlzx.jpg",
+          "alt": null,
+          "width": null,
+          "height": null,
+          "thumbnail": null,
+          "duration_ms": null
+        }
+      ],
+      "urls": [],
+      "hashtags": [],
+      "mentions": [],
+      "cashtags": [],
+      "conversation_id": null,
+      "in_reply_to": null,
+      "is_quote": null,
+      "quoted_tweet": null,
+      "is_retweet": null,
+      "retweeted_tweet": null,
+      "url": "http://nitter.meowing.monster/elonmusk/status/2110438877274259488#m",
+      "sensitive": null
+    },
+    {
+      "id": "2110413877024526603",
+      "text": "Cool\n\n\nAvid (@Av1dlive)\n\ngrok bot pretty much replaced dots and muse for running my business...\n\nhere is why : insanely simple to set up, a MASSIVE plugin library, generous usage.\n\nhere's everything i use and what it costs:\n\nrequired ($165/mo + whop's cut per sale)\n\n&gt; money \u2192 whop plugin\n&gt; site \u2192 vercel + github plugins\n&gt; inbox \u2192 gmail + inbox bot (drafts, never sends)\n&gt; crm \u2192 notion inboxes built with grok bot\n&gt; content \u2192 x plugin + draft-only writer bots\n&gt; video \u2192 opus 5.5 + cursor cloud agents\n&gt; numbers \u2192 notion\n&gt; oversight \u2192 chief of staff morning report + DOGE audits every bot\n\noptional, add when you need it\n\n&gt; support \u2192 intercom or plain + a support inbox bot\n&gt; ads \u2192 whop ads\n&gt; email \u2192 klaviyo and grok bot routines \n&gt; books \u2192 notion\n&gt; leads \u2192 treg, hunter + scout bots\n&gt; code \u2192 builder + reviewer bots + pstack\n&gt; design \u2192 claude opus 5.5 + cursor cloud\n&gt; scheduling \u2192 routines on grok bot with content calendar built by grok bot\n\n\n\n\n\n\u2014 http://nitter.meowing.monster/Av1dlive/status/2110329712715182092#m",
+      "author": {
+        "id": null,
+        "username": "elonmusk",
+        "display_name": null,
+        "avatar": null,
+        "verified": null
+      },
+      "created_at": null,
+      "language": null,
+      "source": null,
+      "reply_count": null,
+      "retweet_count": null,
+      "like_count": null,
+      "quote_count": null,
+      "bookmark_count": null,
+      "view_count": null,
+      "media": [
+        {
+          "type": "photo",
+          "url": "http://nitter.meowing.monster/pic/media%2FHUllraoXIAAsdaW.jpg",
+          "alt": null,
+          "width": null,
+          "height": null,
+          "thumbnail": null,
+          "duration_ms": null
+        }
+      ],
+      "urls": [],
+      "hashtags": [],
+      "mentions": [],
+      "cashtags": [],
+      "conversation_id": null,
+      "in_reply_to": null,
+      "is_quote": null,
+      "quoted_tweet": null,
+      "is_retweet": null,
+      "retweeted_tweet": null,
+      "url": "http://nitter.meowing.monster/elonmusk/status/2110413877024526603#m",
+      "sensitive": null
+    },
+    {
+      "id": "2110198216218067183",
+      "text": "Wanted to read what emails my Grok bot has but Grok bot doesn\u2019t have email UI \u2026 so I asked Grok bot to build it for me .. pretty cool \ud83d\ude0e everything is clickable
+... (truncated)

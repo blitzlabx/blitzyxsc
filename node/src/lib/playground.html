@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>blitzyxsc Playground — Express</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background: #0a0a0a; color: #e5e5e5; }
+.header { background: linear-gradient(90deg, #1DA1F2, #8B5CF6); padding: 24px 32px; }
+.header h1 { margin: 0; font-size: 28px; color: #fff; }
+.header p { margin: 4px 0 0; color: rgba(255,255,255,0.85); font-size: 14px; }
+.header a { color: #fff; }
+.container { display: grid; grid-template-columns: 320px 1fr; gap: 16px; padding: 16px; min-height: calc(100vh - 100px); }
+.sidebar { background: #141414; border: 1px solid #222; border-radius: 8px; padding: 16px; overflow-y: auto; max-height: calc(100vh - 132px); }
+.sidebar h2 { font-size: 14px; text-transform: uppercase; color: #888; margin: 12px 0 6px; letter-spacing: 0.05em; }
+.sidebar a { display: block; padding: 6px 10px; color: #ccc; text-decoration: none; border-radius: 4px; font-size: 13px; cursor: pointer; font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+.sidebar a:hover, .sidebar a.active { background: #1f1f1f; color: #1DA1F2; }
+.main { display: flex; flex-direction: column; gap: 16px; }
+.card { background: #141414; border: 1px solid #222; border-radius: 8px; padding: 16px; }
+.card h3 { margin: 0 0 12px; font-size: 16px; color: #1DA1F2; }
+.row { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; flex-wrap: wrap; }
+input, select { background: #0a0a0a; color: #e5e5e5; border: 1px solid #333; padding: 8px 12px; border-radius: 4px; font-size: 14px; font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+input.url { flex: 1; min-width: 300px; }
+button { background: #1DA1F2; color: #fff; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 14px; }
+button:hover { background: #1a8cd8; }
+button.secondary { background: #333; }
+button.secondary:hover { background: #444; }
+.output { background: #000; color: #0f0; padding: 16px; border-radius: 4px; font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 12px; overflow: auto; max-height: 600px; border: 1px solid #222; white-space: pre-wrap; }
+.meta-row { display: flex; gap: 16px; font-size: 12px; color: #888; margin-top: 8px; flex-wrap: wrap; }
+.meta-row span strong { color: #1DA1F2; }
+.brand { color: #8B5CF6; font-weight: 700; }
+.tag { display: inline-block; padding: 2px 8px; background: #1f1f1f; color: #888; border-radius: 4px; font-size: 11px; margin-left: 8px; }
+.filter-bar { margin-bottom: 8px; }
+.filter-bar input { width: auto; min-width: 120px; margin-right: 6px; }
+.k { color: #f92672; } .s { color: #a6e22e; } .n { color: #ae81ff; } .b { color: #66d9ef; }
+a.endpoint-link { color: #1DA1F2; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>⚡ <span class="brand">blitzyxsc</span> Playground (Express)</h1>
+  <p>Auth-free X/Twitter API tester · by <a href="https://x.com/blitzlabx" target="_blank">@blitzlabx</a> · v1.0.0 · Node.js / Express mirror</p>
+</div>
+
+<div class="container">
+  <div class="sidebar">
+    <div class="filter-bar">
+      <input id="filter" placeholder="Filter endpoints..." style="width:100%">
+    </div>
+
+    <h2>Meta</h2>
+    <a data-endpoint="/health">Health</a>
+    <a data-endpoint="/providers">Providers</a>
+    <a data-endpoint="/providers/health">Providers health</a>
+
+    <h2>Posts &amp; Timeline</h2>
+    <a data-endpoint="/posts/{tweet_id}">Get tweet</a>
+    <a data-endpoint="/posts/user/{username}">User timeline</a>
+    <a data-endpoint="/posts/user/{username}/media">User media tweets</a>
+    <a data-endpoint="/posts/user/{username}/photos">User photos tweets</a>
+    <a data-endpoint="/posts/user/{username}/videos">User videos tweets</a>
+    <a data-endpoint="/posts/user/{username}/replies">User replies</a>
+    <a data-endpoint="/posts/user/{username}/original">User original tweets</a>
+    <a data-endpoint="/posts/user/{username}/retweets">User retweets</a>
+    <a data-endpoint="/posts/user/{username}/quotes">User quote tweets</a>
+    <a data-endpoint="/posts/user/{username}/text-only">User text-only</a>
+    <a data-endpoint="/posts/id/{tweet_id}/stats">Tweet stats</a>
+    <a data-endpoint="/posts/id/{tweet_id}/text">Tweet text</a>
+    <a data-endpoint="/posts/id/{tweet_id}/hashtags">Tweet hashtags</a>
+    <a data-endpoint="/posts/id/{tweet_id}/mentions">Tweet mentions</a>
+    <a data-endpoint="/posts/id/{tweet_id}/urls">Tweet urls</a>
+    <a data-endpoint="/posts/id/{tweet_id}/author">Tweet author</a>
+    <a data-endpoint="/posts/id/{tweet_id}/quoted">Tweet quoted</a>
+    <a data-endpoint="/posts/id/{tweet_id}/conversation">Conversation</a>
+    <a data-endpoint="/posts/by-date">By date range</a>
+    <a data-endpoint="/posts/by-language">By language</a>
+    <a data-endpoint="/posts/by-hashtag">By hashtag</a>
+    <a data-endpoint="/posts/ids">Bulk by IDs</a>
+    <a data-endpoint="/posts/popular/{username}">Popular by user</a>
+
+    <h2>Search</h2>
+    <a data-endpoint="/search">Search</a>
+    <a data-endpoint="/search/latest">Latest</a>
+    <a data-endpoint="/search/top">Top</a>
+    <a data-endpoint="/search/advanced">Advanced</a>
+    <a data-endpoint="/search/photos">Photos only</a>
+    <a data-endpoint="/search/videos">Videos only</a>
+    <a data-endpoint="/search/news">News only</a>
+    <a data-endpoint="/search/hashtag/{hashtag}">By hashtag</a>
+    <a data-endpoint="/search/cashtag/{cashtag}">By cashtag</a>
+    <a data-endpoint="/search/mention/{username}">Mention search</a>
+    <a data-endpoint="/search/from/{username}">From user</a>
+    <a data-endpoint="/search/to/{username}">To user</a>
+    <a data-endpoint="/search/since/{date}">Since date</a>
+    <a data-endpoint="/search/until/{date}">Until date</a>
+    <a data-endpoint="/search/lang/{lang}">By language</a>
+    <a data-endpoint="/search/near/{place}">Near place</a>
+    <a data-endpoint="/search/min-faves/{min_faves}">Min likes</a>
+    <a data-endpoint="/search/min-retweets/{min_retweets}">Min retweets</a>
+    <a data-endpoint="/search/verified">Verified only</a>
+    <a data-endpoint="/search/no-retweets">No retweets</a>
+    <a data-endpoint="/search/no-replies">No replies</a>
+    <a data-endpoint="/search/safe">Safe search</a>
+    <a data-endpoint="/search/original">Original only</a>
+
+    <h2>Profile</h2>
+    <a data-endpoint="/profile/{username}">Full profile</a>
+    <a data-endpoint="/profile/{username}/bio">Bio only</a>
+    <a data-endpoint="/profile/{username}/avatar">Avatar</a>
+    <a data-endpoint="/profile/{username}/banner">Banner</a>
+    <a data-endpoint="/profile/{username}/display-name">Display name</a>
+    <a data-endpoint="/profile/{username}/location">Location</a>
+    <a data-endpoint="/profile/{username}/website">Website</a>
+    <a data-endpoint="/profile/{username}/stats">Stats</a>
+    <a data-endpoint="/profile/{username}/followers">Followers</a>
+    <a data-endpoint="/profile/{username}/following">Following</a>
+    <a data-endpoint="/profile/{username}/verified">Verified</a>
+    <a data-endpoint="/profile/{username}/protected">Protected</a>
+    <a data-endpoint="/profile/{username}/joined">Joined</a>
+    <a data-endpoint="/profile/{username}/id">Internal ID</a>
+    <a data-endpoint="/profile/{username}/summary">Summary</a>
+    <a data-endpoint="/profile/{username}/ratio">Follower ratio</a>
+    <a data-endpoint="/profile/{username}/influence-score">Influence score</a>
+    <a data-endpoint="/profile/{username}/combined">Profile + tweets</a>
+    <a data-endpoint="/profile/{username}/exists">Exists?</a>
+    <a data-endpoint="/profile/{username}/avatar-hd">Avatar HD</a>
+    <a data-endpoint="/profile/{username}/banner-hd">Banner HD</a>
+    <a data-endpoint="/profile/{username}/pinned">Pinned tweet</a>
+    <a data-endpoint="/profile/bulk">Bulk profiles</a>
+
+    <h2>Replies &amp; Comments</h2>
+    <a data-endpoint="/replies/{tweet_id}">Replies</a>
+    <a data-endpoint="/replies/{tweet_id}/latest">Latest replies</a>
+    <a data-endpoint="/replies/{tweet_id}/tree">Reply tree</a>
+    <a data-endpoint="/replies/{tweet_id}/count">Reply count</a>
+    <a data-endpoint="/replies/{tweet_id}/by-verified">Verified replies</a>
+    <a data-endpoint="/replies/{tweet_id}/by-author">By author</a>
+    <a data-endpoint="/replies/{tweet_id}/with-media">With media</a>
+    <a data-endpoint="/replies/{tweet_id}/with-photos">With photos</a>
+    <a data-endpoint="/replies/{tweet_id}/popular">Popular replies</a>
+    <a data-endpoint="/replies/{tweet_id}/controversial">Controversial</a>
+    <a data-endpoint="/replies/{tweet_id}/thread">Thread</a>
+    <a data-endpoint="/replies/{tweet_id}/quoted">Quoted (quote tweets)</a>
+    <a data-endpoint="/replies/{tweet_id}/context">Context view</a>
+    <a data-endpoint="/replies/{tweet_id}/conversation-id">Conversation ID</a>
+    <a data-endpoint="/replies/{tweet_id}/root">Root of conversation</a>
+
+    <h2>Mentions</h2>
+    <a data-endpoint="/mentions/{username}">Mentions</a>
+    <a data-endpoint="/mentions/{username}/latest">Latest mentions</a>
+    <a data-endpoint="/mentions/{username}/top">Top mentions</a>
+    <a data-endpoint="/mentions/{username}/from-verified">From verified</a>
+    <a data-endpoint="/mentions/{username}/with-media">With media</a>
+    <a data-endpoint="/mentions/{username}/with-photos">With photos</a>
+    <a data-endpoint="/mentions/{username}/with-videos">With videos</a>
+    <a data-endpoint="/mentions/{username}/with-links">With links</a>
+    <a data-endpoint="/mentions/{username}/by-lang/{lang}">By language</a>
+    <a data-endpoint="/mentions/{username}/since/{since}">Since date</a>
+    <a data-endpoint="/mentions/{username}/until/{until}">Until date</a>
+    <a data-endpoint="/mentions/{username}/questions">Questions</a>
+    <a data-endpoint="/mentions/{username}/positive">Positive</a>
+    <a data-endpoint="/mentions/{username}/negative">Negative</a>
+    <a data-endpoint="/mentions/{username}/count">Count</a>
+
+    <h2>Trends</h2>
+    <a data-endpoint="/trends">Trends</a>
+    <a data-endpoint="/trends/global">Global</a>
+    <a data-endpoint="/trends/worldwide">Worldwide</a>
+    <a data-endpoint="/trends/us">US</a>
+    <a data-endpoint="/trends/uk">UK</a>
+    <a data-endpoint="/trends/japan">Japan</a>
+    <a data-endpoint="/trends/india">India</a>
+    <a data-endpoint="/trends/brazil">Brazil</a>
+    <a data-endpoint="/trends/germany">Germany</a>
+    <a data-endpoint="/trends/france">France</a>
+    <a data-endpoint="/trends/canada">Canada</a>
+    <a data-endpoint="/trends/australia">Australia</a>
+    <a data-endpoint="/trends/nigeria">Nigeria</a>
+    <a data-endpoint="/trends/top/{n}">Top N</a>
+    <a data-endpoint="/trends/by-volume">By volume</a>
+
+    <h2>Media</h2>
+    <a data-endpoint="/media/tweet/{tweet_id}">Tweet media</a>
+    <a data-endpoint="/media/tweet/{tweet_id}/photos">Tweet photos</a>
+    <a data-endpoint="/media/tweet/{tweet_id}/videos">Tweet videos</a>
+    <a data-endpoint="/media/tweet/{tweet_id}/gifs">Tweet gifs</a>
+    <a data-endpoint="/media/tweet/{tweet_id}/first-photo">First photo</a>
+    <a data-endpoint="/media/tweet/{tweet_id}/first-video">First video</a>
+    <a data-endpoint="/media/tweet/{tweet_id}/thumbnails">Thumbnails</a>
+    <a data-endpoint="/media/tweet/{tweet_id}/count">Media count</a>
+    <a data-endpoint="/media/user/{username}">User media tweets</a>
+    <a data-endpoint="/media/user/{username}/photos">User photos</a>
+    <a data-endpoint="/media/user/{username}/videos">User videos</a>
+    <a data-endpoint="/media/user/{username}/all-photos">All photo URLs</a>
+    <a data-endpoint="/media/user/{username}/all-videos">All video URLs</a>
+    <a data-endpoint="/media/user/{username}/avatar">Avatar</a>
+    <a data-endpoint="/media/user/{username}/banner">Banner</a>
+    <a data-endpoint="/media/user/{username}/avatar-hd">Avatar HD</a>
+    <a data-endpoint="/media/user/{username}/most-viewed">Most viewed</a>
+    <a data-endpoint="/media/search">Media search</a>
+
+    <h2>Quotes</h2>
+    <a data-endpoint="/quotes/{tweet_id}">Quote tweets</a>
+    <a data-endpoint="/quotes/{tweet_id}/latest">Latest quotes</a>
+    <a data-endpoint="/quotes/{tweet_id}/top">Top quotes</a>
+    <a data-endpoint="/quotes/{tweet_id}/by-verified">By verified</a>
+    <a data-endpoint="/quotes/{tweet_id}/with-media">With media</a>
+    <a data-endpoint="/quotes/{tweet_id}/with-photos">With photos</a>
+    <a data-endpoint="/quotes/{tweet_id}/with-videos">With videos</a>
+    <a data-endpoint="/quotes/{tweet_id}/positive">Positive</a>
+    <a data-endpoint="/quotes/{tweet_id}/negative">Negative</a>
+    <a data-endpoint="/quotes/{tweet_id}/by-lang/{lang}">By language</a>
+    <a data-endpoint="/quotes/{tweet_id}/count">Count</a>
+    <a data-endpoint="/quotes/{tweet_id}/since/{since}">Since date</a>
+    <a data-endpoint="/quotes/{tweet_id}/until/{until}">Until date</a>
+    <a data-endpoint="/quotes/{tweet_id}/oldest">Oldest</a>
+    <a data-endpoint="/quotes/{tweet_id}/context">Context</a>
+  </div>
+
+  <div class="main">
+    <div class="card">
+      <h3>Request</h3>
+      <div class="row">
+        <input id="baseUrl" class="url" value="" placeholder="https://localhost:3001">
+      </div>
+      <div class="row">
+        <input id="path" class="url" value="/health" placeholder="/posts/20">
+        <button id="send">Send</button>
+        <button id="copy" class="secondary">Copy URL</button>
+      </div>
+      <div id="params" class="row"></div>
+      <div class="meta-row">
+        <span>Method: <strong>GET</strong></span>
+        <span>Provider: <strong id="provider">—</strong></span>
+        <span>Status: <strong id="status">—</strong></span>
+        <span>Latency: <strong id="latency">—</strong></span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Response</h3>
+      <div class="output" id="output">Click an endpoint on the left to begin.</div>
+      <div class="meta-row">
+        <span>X-Powered-By: <strong id="x-powered-by">—</strong></span>
+        <span>X-Author: <strong id="x-author">—</strong></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const baseInput = document.getElementById('baseUrl');
+const pathInput = document.getElementById('path');
+const paramsEl = document.getElementById('params');
+const outputEl = document.getElementById('output');
+const sendBtn = document.getElementById('send');
+const copyBtn = document.getElementById('copy');
+const filterInput = document.getElementById('filter');
+
+// Default base URL — current origin (so opening /playground works immediately).
+baseInput.value = window.location.origin;
+
+// --- endpoint sidebar ---
+const links = document.querySelectorAll('.sidebar a[data-endpoint]');
+links.forEach(a => {
+  a.addEventListener('click', () => {
+    links.forEach(l => l.classList.remove('active'));
+    a.classList.add('active');
+    const ep = a.dataset.endpoint;
+    pathInput.value = ep;
+    renderParams(ep);
+    send();
+  });
+});
+
+// --- filter ---
+filterInput.addEventListener('input', () => {
+  const q = filterInput.value.toLowerCase();
+  links.forEach(l => {
+    l.style.display = l.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+});
+
+// --- render path-param inputs ---
+function renderParams(ep) {
+  paramsEl.innerHTML = '';
+  const matches = [...ep.matchAll(/\{([^}]+)\}/g)];
+  for (const m of matches) {
+    const name = m[1];
+    const input = document.createElement('input');
+    input.placeholder = name;
+    input.dataset.param = name;
+    input.value = defaultFor(name);
+    input.style.minWidth = '160px';
+    input.addEventListener('input', () => {
+      pathInput.value = buildPath(ep);
+    });
+    paramsEl.appendChild(input);
+  }
+}
+
+function defaultFor(name) {
+  const presets = {
+    tweet_id: '20',
+    username: 'elonmusk',
+    hashtag: 'ai',
+    cashtag: 'TSLA',
+    lang: 'en',
+    place: 'London',
+    date: '2024-01-01',
+    min_faves: '100',
+    min_retweets: '50',
+    min_replies: '10',
+    n: '10',
+    since: '2024-01-01',
+    until: '2024-12-31',
+  };
+  return presets[name] || '';
+}
+
+function buildPath(ep) {
+  let p = ep;
+  for (const input of paramsEl.querySelectorAll('input[data-param]')) {
+    p = p.replace(`{${input.dataset.param}}`, encodeURIComponent(input.value || ''));
+  }
+  return p;
+}
+
+// --- send request ---
+async function send() {
+  const base = baseInput.value.replace(/\/+$/, '');
+  const p = pathInput.value;
+  const url = `${base}${p}`;
+  outputEl.textContent = `→ GET ${url}\n...`;
+  const start = performance.now();
+  try {
+    const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+    const latency = Math.round(performance.now() - start);
+    const text = await res.text();
+    let json;
+    try { json = JSON.parse(text); } catch { json = null; }
+    const pretty = json ? JSON.stringify(json, null, 2) : text;
+    outputEl.textContent = `→ GET ${url}\n← ${res.status} ${res.statusText} (${latency}ms)\n\n${pretty}`;
+    document.getElementById('status').textContent = `${res.status} ${res.statusText}`;
+    document.getElementById('latency').textContent = `${latency}ms`;
+    document.getElementById('x-powered-by').textContent = res.headers.get('X-Powered-By') || '—';
+    document.getElementById('x-author').textContent = res.headers.get('X-Author') || '—';
+    const providerName = json && json.provider ? json.provider.name : (json && json.data && json.data.provider ? json.data.provider.name : '—');
+    document.getElementById('provider').textContent = providerName;
+  } catch (e) {
+    outputEl.textContent = `→ GET ${url}\n✗ ${e.message}\n\nDid you start the server?\n  cd /home/z/my-project/blitzyxsc/node && npm start`;
+    document.getElementById('status').textContent = 'error';
+  }
+}
+
+sendBtn.addEventListener('click', send);
+
+copyBtn.addEventListener('click', () => {
+  const url = `${baseInput.value.replace(/\/+$/, '')}${pathInput.value}`;
+  navigator.clipboard.writeText(url).then(() => {
+    copyBtn.textContent = 'Copied!';
+    setTimeout(() => copyBtn.textContent = 'Copy URL', 1500);
+  });
+});
+
+// Keyboard: Enter on path input sends.
+pathInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') send(); });
+</script>
+</body>
+</html>

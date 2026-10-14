@@ -1,0 +1,31 @@
+===== GET /profile/elonmusk =====
+Status: 200
+X-Powered-By: blitzyxsc 1.0.0
+X-Author: blitzlabx
+
+{
+  "data": {
+    "id": "44196397",
+    "username": "elonmusk",
+    "display_name": "Elon Musk",
+    "bio": "http://Terafab.AI",
+    "location": "",
+    "website": "https://x.com/elonmusk",
+    "avatar": "https://pbs.twimg.com/profile_images/2103567689515954176/aR-Kjpp4_normal.jpg",
+    "banner": "https://pbs.twimg.com/profile_banners/44196397/1774145451",
+    "followers": 241501385,
+    "following": 1421,
+    "tweets_count": 110150,
+    "likes_count": 252788,
+    "listed_count": null,
+    "verified": true,
+    "protected": false,
+    "joined_at": null,
+    "pinned_tweet": null
+  },
+  "provider": {
+    "name": "composable",
+    "latency_ms": 265.11125799970614,
+    "ok": true
+  }
+}

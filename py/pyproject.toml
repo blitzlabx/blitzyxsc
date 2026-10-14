@@ -1,0 +1,45 @@
+[project]
+name = "blitzyxsc"
+version = "1.0.0"
+description = "blitzyxsc — Auth-free X/Twitter scraping API by Blitz (blitzlabx)"
+authors = [{name = "Blitz", email = "blitzlabx@users.noreply.github.com"}]
+license = "MIT"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.27.0",
+    "pydantic>=2.6.0",
+    "pydantic-settings>=2.1.0",
+    "httpx>=0.27.0",
+    "python-multipart>=0.0.9",
+]
+
+[project.optional-dependencies]
+twscrape = ["twscrape>=0.12.0"]
+snscrape = ["snscrape>=0.3.4", "lxml>=4.9.0", "beautifulsoup4>=4.12.0"]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "httpx>=0.27.0",
+    "respx>=0.21.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/blitzlabx/blitzyxsc"
+Documentation = "https://github.com/blitzlabx/blitzyxsc#readme"
+Issues = "https://github.com/blitzlabx/blitzyxsc/issues"
+
+[project.scripts]
+blitzyxsc = "blitzyxsc_api.cli:main"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["blitzyxsc_api*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
