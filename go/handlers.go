@@ -272,17 +272,42 @@ func handleProvidersHealth(w http.ResponseWriter, r *http.Request) {
 }
 
 // handleRoot serves a simple branded HTML landing page.
+// The curl examples on the landing page use the deployment's actual
+// origin (auto-detected from the Host header) so they're always correct —
+// works on localhost, on Fly.io, on Railway, on Render, on any host.
 func handleRoot(w http.ResponseWriter, r *http.Request) {
+        scheme := "http"
+        if r.TLS != nil || r.Header.Get("X-Forwarded-Proto") == "https" {
+                scheme = "https"
+        }
+        host := r.Host
+        if host == "" {
+                host = "localhost:8080"
+        }
+        origin := scheme + "://" + host
+        html := strings.ReplaceAll(landingPageHTML, "{{ORIGIN}}", origin)
         w.Header().Set("Content-Type", "text/html; charset=utf-8")
         w.WriteHeader(http.StatusOK)
-        _, _ = w.Write([]byte(landingPageHTML))
+        _, _ = w.Write([]byte(html))
 }
 
 // handleDocs serves a simple HTML docs page listing every endpoint.
+// Like handleRoot, the docs page can reference {{ORIGIN}} for deployment-aware
+// curl examples.
 func handleDocs(w http.ResponseWriter, r *http.Request) {
+        scheme := "http"
+        if r.TLS != nil || r.Header.Get("X-Forwarded-Proto") == "https" {
+                scheme = "https"
+        }
+        host := r.Host
+        if host == "" {
+                host = "localhost:8080"
+        }
+        origin := scheme + "://" + host
+        html := strings.ReplaceAll(docsPageHTML, "{{ORIGIN}}", origin)
         w.Header().Set("Content-Type", "text/html; charset=utf-8")
         w.WriteHeader(http.StatusOK)
-        _, _ = w.Write([]byte(docsPageHTML))
+        _, _ = w.Write([]byte(html))
 }
 
 // ===========================================================================

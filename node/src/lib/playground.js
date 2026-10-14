@@ -1,9 +1,18 @@
-<!doctype html>
+/**
+ * Playground HTML — exported as a tagged template literal so it gets bundled
+ * with the rest of the server. No file-system lookup at request time.
+ *
+ * The HTML is auto-populated at runtime with the deployment's actual URL
+ * (via `window.location.origin` in the inline <script>).
+ */
+import { AUTHOR_URL, AUTHOR_HANDLE, BRAND, VERSION } from "./config.js";
+
+export const PLAYGROUND_HTML = `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>blitzyxsc Playground — Express</title>
+<title>${BRAND} Playground — Express</title>
 <style>
 * { box-sizing: border-box; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background: #0a0a0a; color: #e5e5e5; }
@@ -39,8 +48,8 @@ a.endpoint-link { color: #1DA1F2; text-decoration: none; }
 </head>
 <body>
 <div class="header">
-  <h1>⚡ <span class="brand">blitzyxsc</span> Playground (Express)</h1>
-  <p>Auth-free X/Twitter API tester · by <a href="https://x.com/blitzlabx" target="_blank">@blitzlabx</a> · v1.0.0 · Node.js / Express mirror</p>
+  <h1>⚡ <span class="brand">${BRAND}</span> Playground (Express)</h1>
+  <p>Auth-free X/Twitter API tester · by <a href="${AUTHOR_URL}" target="_blank">@${AUTHOR_HANDLE}</a> · v${VERSION} · Node.js / Express mirror</p>
 </div>
 
 <div class="container">
@@ -222,7 +231,7 @@ a.endpoint-link { color: #1DA1F2; text-decoration: none; }
     <div class="card">
       <h3>Request</h3>
       <div class="row">
-        <input id="baseUrl" class="url" value="" placeholder="https://localhost:3001">
+        <input id="baseUrl" class="url" value="" placeholder="Auto-detected from current URL">
       </div>
       <div class="row">
         <input id="path" class="url" value="/health" placeholder="/posts/20">
@@ -257,7 +266,9 @@ const sendBtn = document.getElementById('send');
 const copyBtn = document.getElementById('copy');
 const filterInput = document.getElementById('filter');
 
-// Default base URL — current origin (so opening /playground works immediately).
+// Default base URL — auto-detected from the current deployment URL.
+// Works on localhost, on Vercel, on Railway, on Fly.io — wherever the
+// server is hosted, the playground talks back to that same origin.
 baseInput.value = window.location.origin;
 
 // --- endpoint sidebar ---
@@ -284,7 +295,7 @@ filterInput.addEventListener('input', () => {
 // --- render path-param inputs ---
 function renderParams(ep) {
   paramsEl.innerHTML = '';
-  const matches = [...ep.matchAll(/\{([^}]+)\}/g)];
+  const matches = [...ep.matchAll(/\\{([^}]+)\\}/g)];
   for (const m of matches) {
     const name = m[1];
     const input = document.createElement('input');
@@ -321,17 +332,17 @@ function defaultFor(name) {
 function buildPath(ep) {
   let p = ep;
   for (const input of paramsEl.querySelectorAll('input[data-param]')) {
-    p = p.replace(`{${input.dataset.param}}`, encodeURIComponent(input.value || ''));
+    p = p.replace(\`{\${input.dataset.param}}\`, encodeURIComponent(input.value || ''));
   }
   return p;
 }
 
 // --- send request ---
 async function send() {
-  const base = baseInput.value.replace(/\/+$/, '');
+  const base = baseInput.value.replace(/\\/+$/, '');
   const p = pathInput.value;
-  const url = `${base}${p}`;
-  outputEl.textContent = `→ GET ${url}\n...`;
+  const url = \`\${base}\${p}\`;
+  outputEl.textContent = \`→ GET \${url}\\n...\`;
   const start = performance.now();
   try {
     const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
@@ -340,15 +351,15 @@ async function send() {
     let json;
     try { json = JSON.parse(text); } catch { json = null; }
     const pretty = json ? JSON.stringify(json, null, 2) : text;
-    outputEl.textContent = `→ GET ${url}\n← ${res.status} ${res.statusText} (${latency}ms)\n\n${pretty}`;
-    document.getElementById('status').textContent = `${res.status} ${res.statusText}`;
-    document.getElementById('latency').textContent = `${latency}ms`;
+    outputEl.textContent = \`→ GET \${url}\\n← \${res.status} \${res.statusText} (\${latency}ms)\\n\\n\${pretty}\`;
+    document.getElementById('status').textContent = \`\${res.status} \${res.statusText}\`;
+    document.getElementById('latency').textContent = \`\${latency}ms\`;
     document.getElementById('x-powered-by').textContent = res.headers.get('X-Powered-By') || '—';
     document.getElementById('x-author').textContent = res.headers.get('X-Author') || '—';
     const providerName = json && json.provider ? json.provider.name : (json && json.data && json.data.provider ? json.data.provider.name : '—');
     document.getElementById('provider').textContent = providerName;
   } catch (e) {
-    outputEl.textContent = `→ GET ${url}\n✗ ${e.message}\n\nDid you start the server?\n  cd /home/z/my-project/blitzyxsc/node && npm start`;
+    outputEl.textContent = \`→ GET \${url}\\n✗ \${e.message}\\n\\nMake sure the blitzyxsc server is running.\`;
     document.getElementById('status').textContent = 'error';
   }
 }
@@ -356,7 +367,7 @@ async function send() {
 sendBtn.addEventListener('click', send);
 
 copyBtn.addEventListener('click', () => {
-  const url = `${baseInput.value.replace(/\/+$/, '')}${pathInput.value}`;
+  const url = \`\${baseInput.value.replace(/\\/+$/, '')}\${pathInput.value}\`;
   navigator.clipboard.writeText(url).then(() => {
     copyBtn.textContent = 'Copied!';
     setTimeout(() => copyBtn.textContent = 'Copy URL', 1500);
@@ -367,4 +378,4 @@ copyBtn.addEventListener('click', () => {
 pathInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') send(); });
 </script>
 </body>
-</html>
+</html>`;

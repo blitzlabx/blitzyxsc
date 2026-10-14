@@ -6,12 +6,10 @@
  */
 
 import express from "express";
-import path from "node:path";
-import fs from "node:fs";
-import { fileURLToPath } from "node:url";
 import { AUTHOR, AUTHOR_HANDLE, AUTHOR_URL, BRAND, VERSION } from "../lib/config.js";
 import { healthResponse, providerListResponse } from "../lib/schemas.js";
 import { registry } from "../providers/index.js";
+import { PLAYGROUND_HTML } from "../lib/playground.js";
 
 export const router = express.Router();
 
@@ -78,22 +76,7 @@ router.get("/providers/health", async (_req, res) => {
 });
 
 router.get("/playground", (_req, res) => {
-  const here = path.dirname(fileURLToPath(import.meta.url));
-  const candidates = [
-    path.join(here, "playground.html"),
-    path.join(process.cwd(), "src", "lib", "playground.html"),
-    path.join(process.cwd(), "playground.html"),
-  ];
-  for (const p of candidates) {
-    try {
-      if (fs.existsSync(p)) {
-        return res.type("html").send(fs.readFileSync(p, "utf8"));
-      }
-    } catch {
-      // try next candidate
-    }
-  }
-  res.status(404).type("html").send("<h1>Playground file not found</h1>");
+  res.type("html").send(PLAYGROUND_HTML);
 });
 
 export default router;

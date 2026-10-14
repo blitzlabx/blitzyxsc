@@ -9,9 +9,9 @@
   "variable": [
     {
       "key": "base_url",
-      "value": "http://localhost:8000",
+      "value": "https://YOUR-DEPLOYMENT-URL.example.com",
       "type": "string",
-      "description": "Base URL of your blitzyxsc deployment."
+      "description": "Base URL of your blitzyxsc deployment. Replace with your actual URL (e.g. https://blitzyxsc.vercel.app, http://localhost:8000, etc.)."
     }
   ],
   "item": [

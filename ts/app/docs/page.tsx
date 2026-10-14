@@ -1,10 +1,18 @@
-import Link from "next/link";
-import type { Metadata } from "next";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Docs",
-  description: "blitzyxsc API reference — every endpoint grouped by router.",
-};
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+// Deployment-aware origin — defaults to empty string on SSR, fills with the
+// real deployment URL on the client. Used to make the curl examples in the
+// docs always show the correct URL (no more hardcoded localhost).
+function useOrigin() {
+  const [origin, setOrigin] = useState("");
+  useEffect(() => {
+    if (typeof window !== "undefined") setOrigin(window.location.origin);
+  }, []);
+  return origin;
+}
 
 type Endpoint = {
   method: "GET";
@@ -673,6 +681,7 @@ function EndpointRow({ ep }: { ep: Endpoint }) {
 }
 
 export default function DocsPage() {
+  const origin = useOrigin();
   const allGroups = [...GROUPS];
   if (EXTENDED_ENDPOINTS.length) {
     allGroups.push({
@@ -819,9 +828,10 @@ npm run dev
 npm run build && npm start
 
 # health check
-curl http://localhost:3000/api/health
-curl http://localhost:3000/api/profile/elonmusk
-curl http://localhost:3000/api/posts/20`}</code>
+# (uses your deployment URL — auto-detected from the browser)
+curl ${origin || "<your-deployment-url>"}/api/health
+curl ${origin || "<your-deployment-url>"}/api/profile/elonmusk
+curl ${origin || "<your-deployment-url>"}/api/posts/20`}</code>
         </pre>
 
         {allGroups.map((g) => (

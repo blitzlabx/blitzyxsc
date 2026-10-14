@@ -18,10 +18,16 @@ Python service, so the two deployments are interchangeable client-side.
 - 🏷️ **Branded everywhere** — every response carries
   `X-Powered-By: blitzyxsc 1.0.0` and `X-Author: blitzlabx`.
 
+## Get the code
+
+```bash
+git clone https://github.com/blitzlabx/blitzyxsc.git
+cd blitzyxsc/node
+```
+
 ## Quick start
 
 ```bash
-cd /home/z/my-project/blitzyxsc/node
 npm install
 npm start
 # ⚡ blitzyxsc v1.0.0 by blitzlabx — listening on http://0.0.0.0:3001
@@ -294,7 +300,7 @@ CMD ["npm", "start"]
 ## Smoke test
 
 ```bash
-cd /home/z/my-project/blitzyxsc/node && npm install --silent
+npm install --silent
 node src/server.js &
 SERVER_PID=$!
 sleep 2

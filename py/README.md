@@ -4,6 +4,13 @@
 
 This is the **primary implementation** of blitzyxsc, with all 220+ endpoints and full multi-provider fallback. Deploy on Vercel, Docker, or any Python host.
 
+## Get the code
+
+```bash
+git clone https://github.com/blitzlabx/blitzyxsc.git
+cd blitzyxsc/py
+```
+
 ## Quick start
 
 ```bash

@@ -41,6 +41,13 @@ All providers are auth-free. No account, no token, no API key.
 
 ---
 
+## Get the code
+
+```bash
+git clone https://github.com/blitzlabx/blitzyxsc.git
+cd blitzyxsc/go
+```
+
 ## Quick start
 
 ### Prerequisites
@@ -50,7 +57,6 @@ All providers are auth-free. No account, no token, no API key.
 ### Build
 
 ```bash
-cd blitzyxsc/go
 go build -o blitzyxsc .
 ```
 

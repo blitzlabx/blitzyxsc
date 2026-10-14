@@ -39,6 +39,13 @@ interchangeable from a client perspective.
   ~80 endpoints with deep-linking, JSON syntax highlighting, and copy-to-clipboard
 - **Docs page** — branded endpoint reference at `/docs`
 
+## Get the code
+
+```bash
+git clone https://github.com/blitzlabx/blitzyxsc.git
+cd blitzyxsc/ts
+```
+
 ## Quick start
 
 ```bash

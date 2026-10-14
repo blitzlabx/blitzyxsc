@@ -54,6 +54,17 @@ Built by **Blitz** (`@blitzlabx` on every platform — X, GitHub, etc.). Availab
 
 ## Quick start
 
+### Get the code
+
+```bash
+git clone https://github.com/blitzlabx/blitzyxsc.git
+cd blitzyxsc
+```
+
+Or download the latest release zip from <https://github.com/blitzlabx/blitzyxsc/releases>.
+
+Then pick whichever language edition you want:
+
 ### Option A — Python (FastAPI) — primary
 
 ```bash

@@ -143,10 +143,10 @@ go build -o blitzyxsc .
 # run
 ./blitzyxsc
 
-# probe
-curl http://localhost:8080/health
-curl http://localhost:8080/profile/elonmusk
-curl http://localhost:8080/posts/20</pre>
+# probe (replace {{ORIGIN}} with your deployment URL — auto-filled on this page)
+curl {{ORIGIN}}/health
+curl {{ORIGIN}}/profile/elonmusk
+curl {{ORIGIN}}/posts/20</pre>
 </div>
 <p class="meta">
 v1.0.0 • by <a href="https://x.com/blitzlabx" target="_blank" rel="noopener">@blitzlabx</a> •
